@@ -5,6 +5,9 @@ A more detailed list of changes is available in the corresponding milestones for
 ## 0.7.38 (2021-Jun-??)
 ### New Checks
   - **[com.google.fonts/check/os2/use_typo_metrics]:** Confirm that OS/2.fsSelection bit 7 (USE TYPO METRICS) is set (PR #3314, issue #3241)
+  - **[com.google.fonts/check/layout_valid_feature_tags]:** Check if the font contains any invalid feature tags. (PR #3359, issue #3355)
+  - **[com.google.fonts/check/layout_valid_script_tags]:** Check if the font contains any invalid script tags. (PR #3359, issue #3355)
+  - **[com.google.fonts/check/layout_valid_language_tags]:** Check if the font contains any invalid language tags. (PR #3359, issue #3355)
 
 ### Dependencies
   - Drop again the usage of unidecode due to licensing policies (issue #3316)
