@@ -51,7 +51,7 @@ class CheckTester:
         self.check_iterargs = None
         self._args = None
 
-    def _get_args(self, condition_overrides=None):
+    def _get_args(self, implementation, condition_overrides=None):
         if condition_overrides is not None:
             for name_key, value in condition_overrides.items():
                 if isinstance(name_key, str):
@@ -65,7 +65,7 @@ class CheckTester:
                     key = name_key
                 #                                      error, value
                 self.runner._cache['conditions'][key] = None, value
-        args = self.runner._get_args(self.check, self.check_iterargs)
+        args = self.runner._get_args(implementation, self.check_iterargs)
         # args that are derived iterables are generators that must be
         # converted to lists, otherwise we end up with exhausted
         # generators after their first consumption.
@@ -93,7 +93,7 @@ class CheckTester:
                       'fonts': [values.reader.file.name],
                       'ttFont': values,
                       'ttFonts': [values]}
-        elif isinstance(values, list):
+        elif isinstance(values, list) and values:
             if isinstance(values[0], str):
                 values = {'fonts': values}
             elif isinstance(values[0], TTFont):
@@ -111,8 +111,11 @@ class CheckTester:
         if self.check_identity is None:
             raise KeyError(f'Check with id "{self.check_id}" not found.')
 
-        self._args = self._get_args(condition_overrides)
-        return list(self.runner._exec_check(self.check, self._args))
+        results = []
+        for implementation in self.check.implementations:
+          self._args = self._get_args(implementation.callable, condition_overrides)
+          results.extend(list(self.runner._exec_check_implementation(self.check, implementation, self._args)))
+        return results
 
 
 def portable_path(p):

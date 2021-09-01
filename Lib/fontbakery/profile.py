@@ -263,24 +263,25 @@ class Profile:
         # make this simple, collect all used names
         for section_name, section in self._sections.items():
             for check in section.checks:
-                dependencies = list(check.args)
-                if hasattr(check, "conditions"):
-                    dependencies += [
-                        name for negated, name in map(is_negated, check.conditions)
-                    ]
+                for implementation in check.implementations:
+                    dependencies = list(implementation.callable.args)
+                    if hasattr(implementation, "conditions"):
+                        dependencies += [
+                            name for negated, name in map(is_negated, implementation.conditions)
+                        ]
 
-                while dependencies:
-                    name = dependencies.pop()
-                    if name in seen:
-                        continue
-                    seen.add(name)
-                    if name not in self._namespace:
-                        failed.append(name)
-                        continue
-                    # if this is a condition, expand its dependencies
-                    condition = self.conditions.get(name, None)
-                    if condition is not None:
-                        dependencies += condition.args
+                    while dependencies:
+                        name = dependencies.pop()
+                        if name in seen:
+                            continue
+                        seen.add(name)
+                        if name not in self._namespace:
+                            failed.append(name)
+                            continue
+                        # if this is a condition, expand its dependencies
+                        condition = self.conditions.get(name, None)
+                        if condition is not None:
+                            dependencies += condition.args
         if len(failed):
             comma_separated = ", ".join(failed)
             raise SetupError(
@@ -432,6 +433,11 @@ class Profile:
         """
         if not key in ("args", "mandatoryArgs"):
             raise TypeError(f'key must be "args" or "mandatoryArgs", got {key}')
+        if isinstance(item, FontBakeryCheck):
+            args = set()
+            for implementation in item.implementations:
+                args.update(self._get_aggregate_args(implementation.callable, key))
+            return args
         dependencies = list(getattr(item, key))
         if hasattr(item, "conditions"):
             dependencies += [name for negated, name in map(is_negated, item.conditions)]
@@ -657,14 +663,8 @@ class Profile:
                         "register in {}.".format(func, other_section, section)
                     )
                 return False  # skipped
-            else:
-                raise SetupError(
-                    f'Check id "{func}" is not unique!'
-                    f" It is already registered in {other_section} and"
-                    f" registration for that id is now requested in {section}."
-                    f" BUT the current check is a different object than"
-                    f" the registered check."
-                )
+            # It's now acceptable to register multiple implementations with
+            # the same check ID, so we no longer complain about it here.
         self._check_registry[func.id] = section
         return True
 
@@ -741,6 +741,7 @@ class Profile:
             section = self._default_section
             return self._add_check(section, func)
         else:
+            import IPython;IPython.embed()
             return partial(self._add_check, section)
 
     def _add_condition(self, condition, name=None):

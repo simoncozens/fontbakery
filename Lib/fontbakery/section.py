@@ -70,7 +70,9 @@ class Section:
             if not self._add_check_callback(self, check):
                 # rejected, skip!
                 return False
-
+        if check.id in self._checkid2index:
+            idx = self._checkid2index[check.id]
+            self.merge_check_implementations(check, self._checks[idx])
         self._checkid2index[check.id] = len(self._checks)
         self._checks.append(check)
         return True
@@ -136,3 +138,21 @@ class Section:
         if not self.add_check(func):
             raise SetupError(f'Can\'t add check {func} to section {self}.')
         return func
+
+    def merge_check_implementations(self, check1, check2):
+        # Make sure that if we have rationale/etc., they match
+        for attr in ["rationale", "documentation", "name", "rationale", "severity"]:
+            left_attr = getattr(check1, attr)
+            right_attr = getattr(check2, attr)
+            if left_attr and right_attr and left_attr != right_attr:
+                raise SetupError("Could not merge multiple implementations of check"
+                    f"{check1.id}, because they have different {attr}:\n"
+                    f"{check1.name}: {left_attr}\n"
+                    f"{check2.name}: {right_attr}\n"
+                )
+            # Inherit from the new check if it gives us information we don't have
+            if right_attr and not left_attr:
+                setattr(check1, attr, right_attr)
+
+        check1.implementations.extend(check2.implementations)
+
