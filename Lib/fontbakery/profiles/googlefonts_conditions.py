@@ -695,8 +695,10 @@ def production_metadata():
     import json
     import requests
     meta_url = "http://fonts.google.com/metadata/fonts"
-    # can't do requests.get("url").json() since request text starts with ")]}'"
-    return json.loads(requests.get(meta_url).text[5:])
+    response = requests.get(meta_url)
+    if not response.ok:
+      raise Exception(f"Could not retrieve metadata from {meta_url}: {response.reason}")
+    return response.json()
 
 
 @condition
