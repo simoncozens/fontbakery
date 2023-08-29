@@ -3,7 +3,7 @@ import re
 
 from packaging.version import VERSION_PATTERN
 
-from fontbakery.callable import check
+from fontbakery.callable import check, disable
 from fontbakery.constants import PlatformID, WindowsEncodingID
 from fontbakery.fonts_profile import profile_factory
 from fontbakery.glyphdata import desired_glyph_data
@@ -60,7 +60,7 @@ UNIVERSAL_PROFILE_CHECKS = (
         "com.google.fonts/check/transformed_components",
         "com.google.fonts/check/gpos7",
         "com.google.fonts/check/caps_vertically_centered",
-        "com.google.fonts/check/ots",
+        # "com.google.fonts/check/ots",
         "com.adobe.fonts/check/freetype_rasterizer",
         "com.adobe.fonts/check/sfnt_version",
         "com.google.fonts/check/whitespace_widths",
@@ -323,6 +323,7 @@ def com_google_fonts_check_caps_vertically_centered(ttFont):
         yield PASS, "Uppercase glyphs are vertically centered in the em box."
 
 
+@disable
 @check(id="com.google.fonts/check/ots", proposal="legacy:check/036")
 def com_google_fonts_check_ots(font):
     """Checking with ots-sanitize."""

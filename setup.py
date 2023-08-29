@@ -151,9 +151,6 @@ setup(
         "freetype-py!=2.4.0",  # Avoiding 2.4.0 due to seg-fault described at
         # https://github.com/fonttools/fontbakery/issues/4143
         "opentypespec",
-        "opentype-sanitizer>=7.1.9",  # 7.1.9 fixes caret value format = 3 bug
-        # (see https://github.com/khaledhosny/ots/pull/182)
-        # ---
         # fontTools extra that is needed by 'interpolation_issues' check in
         # Universal profile
         "munkres",

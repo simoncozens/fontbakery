@@ -14,7 +14,6 @@ gflanguages==0.5.4
 glyphsets==0.6.2
 lxml==4.9.3
 munkres==1.1.4  # This should be a dependency of fonttools instead!
-opentype-sanitizer==9.1.0
 opentypespec==1.9.1
 packaging==23.1
 pip-api==0.0.30
