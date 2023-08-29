@@ -68,7 +68,7 @@ UNIVERSAL_PROFILE_CHECKS = (
         "com.google.fonts/check/math_signs_width",
         "com.google.fonts/check/linegaps",
         "com.google.fonts/check/STAT_in_statics",
-        "com.google.fonts/check/alt_caron",
+        # "com.google.fonts/check/alt_caron",
     ]
 )
 
@@ -2034,6 +2034,7 @@ def com_google_fonts_check_STAT_in_statics(ttFont):
         yield PASS, "Looks good!"
 
 
+@disable
 @check(
     id="com.google.fonts/check/alt_caron",
     rationale="""
@@ -2050,7 +2051,11 @@ def com_google_fonts_check_STAT_in_statics(ttFont):
 )
 def com_google_fonts_check_alt_caron(font):
     """Check accent of Lcaron, dcaron, lcaron, tcaron"""
-    import babelfont
+    try:
+        import babelfont
+    except ImportError:
+        yield SKIP, "babelfont module not available."
+        return
 
     passed = True
     CARON_GLYPHS = set(
