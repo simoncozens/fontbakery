@@ -1065,12 +1065,18 @@ def font_codepoints(ttFont):
 def com_google_fonts_check_glyph_coverage(ttFont, font_codepoints, config):
     """Check Google Fonts glyph coverage."""
     from glyphsets import GFGlyphData as glyph_data
-    import unicodedata2
+    import unicodedata
+
+    def uniname(c):
+        try:
+          return unicodedata.name(chr(c))
+        except Exception:
+          return "Unknown"
 
     def missing_encoded_glyphs(glyphs):
         encoded_glyphs = [g["unicode"] for g in glyphs if g["unicode"]]
         return [
-            "0x%04X (%s)\n" % (c, unicodedata2.name(chr(c))) for c in encoded_glyphs
+            "0x%04X (%s)\n" % (c, uniname) for c in encoded_glyphs
         ]
 
     missing_mandatory_glyphs = glyph_data.missing_glyphsets_in_font(
@@ -1176,7 +1182,6 @@ def com_google_fonts_check_metadata_unreachable_subsetting(
     """Check for codepoints not covered by METADATA subsets."""
     from glyphsets import codepoints
     from fontbakery.utils import pretty_print_list
-    import unicodedata2
 
     codepoints.set_encoding_path(codepoints.nam_dir)
 
@@ -1212,7 +1217,7 @@ def com_google_fonts_check_metadata_unreachable_subsetting(
             subsets = ", ".join(subsets)
 
         try:
-            name = unicodedata2.name(chr(codepoint))
+            name = unicodedata.name(chr(codepoint))
         except Exception:
             name = ""
 
