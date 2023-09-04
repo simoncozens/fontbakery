@@ -391,9 +391,12 @@ def listed_on_gfonts_api(familyname, config):
     # to find it in the GFonts metadata:
     from_camelcased_name = split_camel_case(familyname)
 
-    for item in production_metadata(config)["familyMetadataList"]:
-        if item["family"] == familyname or item["family"] == from_camelcased_name:
-            return True
+    try:
+        for item in production_metadata(config)["familyMetadataList"]:
+            if item["family"] == familyname or item["family"] == from_camelcased_name:
+                return True
+    except Exception:
+        return False
 
     return False
 
