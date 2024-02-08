@@ -223,6 +223,7 @@ class Font(Testable):
 @dataclass
 class CheckRunContext:
     testables: Iterable[Testable] = field(default_factory=list)
+    config: dict = field(default_factory=dict)
 
     @cached_property
     def testables_by_type(self):
