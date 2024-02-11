@@ -138,7 +138,7 @@ def com_google_fonts_check_italic_axis_in_stat(fonts, config):
     """Ensure VFs have 'ital' STAT axis."""
     from fontTools.ttLib import TTFont
 
-    italics = [f for f in fonts if "Italic" in f]
+    italics = [f.file for f in fonts if "Italic" in f.file]
     missing_roman = []
     italic_to_roman_mapping = {}
     for italic in italics:
