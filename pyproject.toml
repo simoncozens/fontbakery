@@ -1,3 +1,52 @@
+[build-system]
+requires = ["setuptools >= 61.0", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="fontbakery"
+dynamic = ["version"]
+description="A font quality assurance tool for everyone"
+readme = { file= "readme.md",content-type="text/markdown" }
+dependencies = [
+  "fontTools ~= 4",
+  "freetype-py != 2.4.0",
+  "opentypespec",
+  "opentype-sanitizer >= 7.1.9, == 7.*",
+  "munkres",
+  "PyYAML",
+  "toml",
+  "cmarkgfm >= 0.4",
+  "rich",
+  "Jinja2",
+  "packaging",
+  "pip-api",
+  "requests",
+  "beziers >=0.5.0, =0.5.*",
+  "uharfbuzz",
+  "vharfbuzz>=0.2.0, == 0.2.*"
+]
+
+[project.scripts]
+fontbakery = "fontbakery.cli:main"
+
+[project.optional-dependencies]
+googlefonts = [
+    "axisregistry >=0.4.5, == 0.4.*",
+    "gflanguages >=0.5.17, == 0.5.*",
+    "gfsubsets >=2024.1.22.post2",
+    "glyphsets >=0.6.11, == 0.6.*",
+    "shaperglot>=0.3.1",
+    "beautifulsoup4 >=4.7.1, == 4.*",
+    "dehinter>=3.1.0, == 3.*",
+    "font-v>=0.6.0",
+    "fontTools[lxml,unicode] ~= 4",
+    "protobuf>=3.7.0, == 3.*",
+    "collidoscope>=0.5.2, == 0.5.*",
+    "stringbrewer",
+    "ufo2ft >=2.25.2, == 2.*",
+    "ufolint",
+]
+
 # ============================================================================
 [tool.black]
 line-length = 88
