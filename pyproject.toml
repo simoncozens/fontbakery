@@ -15,7 +15,7 @@ dependencies = [
   "munkres",
   "PyYAML",
   "toml",
-  "cmarkgfm >= 0.4",
+  "cmarkgfm >=0.8.0",
   "rich",
   "Jinja2",
   "packaging",
