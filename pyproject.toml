@@ -40,7 +40,7 @@ googlefonts = [
     "dehinter>=3.1.0, == 3.*",
     "font-v>=0.6.0",
     "fontTools[lxml,unicode] ~= 4",
-    "protobuf>=3.7.0, == 3.*",
+    "protobuf>=3.20.3, ==3.*",
     "collidoscope>=0.5.2, == 0.5.*",
     "stringbrewer",
     "ufo2ft >=2.25.2, == 2.*",
