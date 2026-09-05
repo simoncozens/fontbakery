@@ -32,7 +32,7 @@ fontbakery = "fontbakery.cli:main"
 [project.optional-dependencies]
 googlefonts = [
     "axisregistry >=0.4.5, == 0.4.*",
-    "gflanguages >=0.5.17, == 0.5.*",
+    "gflanguages >=0.7.11, ==0.7.*",
     "gfsubsets >=2024.1.22.post2",
     "glyphsets >=0.6.11, == 0.6.*",
     "shaperglot>=0.3.1",
